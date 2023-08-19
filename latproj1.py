@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 import argparse
 
-def parse_arguments() -> argparse.Namespace:
+def parse_arguments() -> argparse.Namespace: #tidak bekerja sptnya 
     parser = argparse.ArgumentParser(description="YOLOv8 live")
     parser.add_argument(
         "--webcam-resolution", 
