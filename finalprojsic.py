@@ -1,23 +1,28 @@
 import cv2
 import numpy as np
 import requests
+import random 
 
 TOKEN = "BBFF-E7TPIZuiXdaKOS3gELBZPWRUtsRxKJ"
 DEVICE_LABEL = "SIC"
 JUMLAH_BARANG = "jumlah barang"
-#HUMIDITY_LABEL = "humidity"
+JUMLAH_BARANG_ungu = "jumlah barang ungu"
+SUHU_RUANG="temperature room"
 
 # Define the color ranges you want to detect (e.g., blue and green)
 lower_blue = np.array([90, 50, 50])
 upper_blue = np.array([130, 255, 255])
 
-lower_green = np.array([40, 50, 50])
-upper_green = np.array([90, 255, 255])
+lower_purple = np.array([140, 50, 50])
+upper_purple = np.array([170, 255, 255])
 def kirim():
     #ubidots send
+    temperature_value = round(random.uniform(-10, 50), 2)
+     
     payload = {
-        JUMLAH_BARANG: blue_object_count
-        
+        JUMLAH_BARANG: blue_object_count,
+        JUMLAH_BARANG_ungu: green_object_count,
+        SUHU_RUANG : temperature_value 
     }
 
     url = f"http://industrial.api.ubidots.com/api/v1.6/devices/{DEVICE_LABEL}"
@@ -26,7 +31,7 @@ def kirim():
     try:
         response = requests.post(url=url, headers=headers, json=payload)
         if response.status_code == 200:
-            print(f"Data sent to Ubidots: JUMLAH={blue_object_count}")
+            print(f"Data sent to Ubidots: biru={blue_object_count} ungu:{green_object_count} suhu :{temperature_value}")
         else:
             print("Failed to send data. Status code:", response.status_code)
     except requests.exceptions.RequestException as e:
@@ -43,7 +48,7 @@ while True:
 
     # Create masks to isolate the blue and green colors
     mask_blue = cv2.inRange(hsv, lower_blue, upper_blue)
-    mask_green = cv2.inRange(hsv, lower_green, upper_green)
+    mask_green = cv2.inRange(hsv, lower_purple, upper_purple)
 
     # Combine the masks to detect both blue and green objects
     combined_mask = mask_blue + mask_green
